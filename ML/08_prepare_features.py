@@ -141,15 +141,15 @@ print(preprocessor_path)
 # 8. SAVE PROCESSED ARRAYS
 # ------------------------------------------------------------
 
-from scipy.sparse import save_npz
+import numpy as np
 
-save_npz(
-    MODEL_DIR / "X_train_processed.npz",
+np.save(
+    MODEL_DIR / "X_train_processed.npy",
     X_train_processed
 )
 
-save_npz(
-    MODEL_DIR / "X_test_processed.npz",
+np.save(
+    MODEL_DIR / "X_test_processed.npy",
     X_test_processed
 )
 
