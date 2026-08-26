@@ -1,0 +1,2 @@
+Station_Names,Year,Month,Max_Temp,Min_Temp,Rainfall,Relative_Humidity,Wind_Speed,Cloud_Coverage,Bright_Sunshine,LATITUDE,LONGITUDE,ALT,Season,Rainfall_Category,Temperature_Range,Humidity_Rainfall_Index,Flood_Prediction,Flood_Probability,Risk_Level,Recommended_Response
+Barisal,2023,7,32.0,25.0,469.0,85.0,15.0,70.0,5.0,22.701,90.3535,35.0,Monsoon,High,7.0,39865.0,1,1.0,HIGH,Immediate preparedness and flood-warning measures are recommended.
