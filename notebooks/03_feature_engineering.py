@@ -3,7 +3,7 @@ import pandas as pd
 import numpy as np
 
 # ============================================================
-# 1. PATHS
+# INDIA FLOOD INVENTORY - FEATURE ENGINEERING
 # ============================================================
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
@@ -23,7 +23,7 @@ OUTPUT_FILE = (
 )
 
 # ============================================================
-# 2. LOAD DATA
+# 1. LOAD DATA
 # ============================================================
 
 print("=" * 70)
@@ -42,7 +42,7 @@ print("Rows    :", len(df))
 print("Columns :", len(df.columns))
 
 # ============================================================
-# 3. CHECK TARGET
+# 2. CHECK TARGET
 # ============================================================
 
 TARGET = "High_Impact"
@@ -62,7 +62,7 @@ print(
 )
 
 # ============================================================
-# 4. DATE FEATURES
+# 3. DATE FEATURES
 # ============================================================
 
 print("\n" + "=" * 70)
@@ -98,7 +98,7 @@ if "Start Date" in df.columns:
     print("- Quarter")
 
 # ============================================================
-# 5. CYCLICAL MONTH FEATURES
+# 4. CYCLICAL MONTH FEATURES
 # ============================================================
 
 print("\nCreating cyclical month features...")
@@ -117,7 +117,7 @@ if "Month" in df.columns:
     print("- Month_Cos")
 
 # ============================================================
-# 6. DURATION FEATURES
+# 5. DURATION FEATURES
 # ============================================================
 
 print("\nCreating duration features...")
@@ -136,7 +136,7 @@ if "Duration(Days)" in df.columns:
     print("- Long_Event")
 
 # ============================================================
-# 7. CAUSE GROUPING
+# 6. CAUSE GROUPING
 # ============================================================
 
 print("\n" + "=" * 70)
@@ -195,12 +195,11 @@ if "Main Cause" in df.columns:
         df["Cause_Group"]
         .value_counts()
     )
-
 # ============================================================
-# 8. STATE COUNT
+# 7. STATE / DISTRICT COUNTS
 # ============================================================
 
-print("\nCreating state count...")
+print("\nCreating geographical count features...")
 
 if "State" in df.columns:
 
@@ -208,22 +207,19 @@ if "State" in df.columns:
         df["State"]
         .fillna("")
         .astype(str)
+        .str.split(",")
         .apply(
-            lambda x:
-            len([
-                s for s in x.split(",")
-                if s.strip()
-            ])
+            lambda values:
+            sum(
+                1
+                for value in values
+                if value.strip()
+            )
         )
     )
 
     print("- State_Count")
 
-# ============================================================
-# 9. DISTRICT COUNT
-# ============================================================
-
-print("Creating district count...")
 
 if "Districts" in df.columns:
 
@@ -231,19 +227,21 @@ if "Districts" in df.columns:
         df["Districts"]
         .fillna("")
         .astype(str)
+        .str.split(",")
         .apply(
-            lambda x:
-            len([
-                d for d in x.split(",")
-                if d.strip()
-            ])
+            lambda values:
+            sum(
+                1
+                for value in values
+                if value.strip()
+            )
         )
     )
 
     print("- District_Count")
 
 # ============================================================
-# 10. EVENT SOURCE AVAILABILITY
+# 8. EVENT SOURCE AVAILABILITY
 # ============================================================
 
 if "Event Source" in df.columns:
@@ -257,24 +255,26 @@ if "Event Source" in df.columns:
     print("- Event_Source_Available")
 
 # ============================================================
-# 11. IMPORTANT LEAKAGE CONTROL
+# 9. LEAKAGE CONTROL
 # ============================================================
 
 print("\n" + "=" * 70)
 print("LEAKAGE CONTROL")
 print("=" * 70)
 
-leakage_columns = [
+LEAKAGE_COLUMNS = [
     "Human fatality",
     "Human injured",
     "Human Displaced",
     "Animal Fatality",
     "Description of Casualties/injured",
+    "Extent of damage",
+    "Area Affected",
     "Total_Human_Impact",
     "Reported_Human_Impact"
 ]
 
-for column in leakage_columns:
+for column in LEAKAGE_COLUMNS:
 
     if column in df.columns:
 
@@ -288,12 +288,12 @@ for column in leakage_columns:
         )
 
 print(
-    "\nHuman casualty information will NOT "
-    "be used as model input."
+    "\nAll identified outcome/leakage "
+    "variables excluded from model features."
 )
 
 # ============================================================
-# 12. REMOVE IDENTIFIERS
+# 10. REMOVE IDENTIFIERS
 # ============================================================
 
 print("\n" + "=" * 70)
@@ -317,20 +317,87 @@ for column in identifier_columns:
         )
 
         print(
-            f"Removed identifier/date column: {column}"
+            f"Removed: {column}"
         )
 
 # ============================================================
-# 13. CHECK TARGET AGAIN
+# 11. CLEAN NUMERIC FEATURES
+# ============================================================
+
+print("\n" + "=" * 70)
+print("NUMERIC FEATURE CLEANING")
+print("=" * 70)
+
+numeric_columns = [
+    "Duration(Days)",
+    "State_Codes",
+    "District_LGD_Codes",
+    "Year",
+    "Month",
+    "Day",
+    "Quarter",
+    "Month_Sin",
+    "Month_Cos",
+    "Long_Event",
+    "State_Count",
+    "District_Count",
+    "Event_Source_Available"
+]
+
+for column in numeric_columns:
+
+    if column in df.columns:
+
+        df[column] = pd.to_numeric(
+            df[column],
+            errors="coerce"
+        )
+
+        print(
+            f"{column}: numeric"
+        )
+
+# ============================================================
+# 12. FINAL TARGET CHECK
 # ============================================================
 
 if TARGET not in df.columns:
+
     raise ValueError(
-        "Target was accidentally removed."
+        "Target High_Impact was accidentally removed."
     )
 
 # ============================================================
-# 14. CHECK DATA
+# 13. VERIFY NO LEAKAGE COLUMNS REMAIN
+# ============================================================
+
+print("\n" + "=" * 70)
+print("FINAL LEAKAGE VERIFICATION")
+print("=" * 70)
+
+remaining_leakage = [
+    column
+    for column in LEAKAGE_COLUMNS
+    if column in df.columns
+]
+
+if remaining_leakage:
+
+    print(
+        "WARNING - leakage columns still present:"
+    )
+
+    for column in remaining_leakage:
+        print("-", column)
+
+else:
+
+    print(
+        "PASS: No identified leakage columns remain."
+    )
+
+# ============================================================
+# 14. FINAL DATA CHECK
 # ============================================================
 
 print("\n" + "=" * 70)
@@ -346,22 +413,33 @@ print(
     len(df.columns)
 )
 
-print(
-    "\nMissing values:"
-)
+print("\nFinal columns:")
+
+for i, column in enumerate(
+    df.columns,
+    start=1
+):
+
+    print(
+        f"{i:>2}. {column}"
+    )
+
+print("\nMissing values:")
 
 missing = df.isnull().sum()
 
 missing = missing[missing > 0]
 
 if missing.empty:
+
     print("No missing values.")
 
 else:
+
     print(missing)
 
 # ============================================================
-# 15. SAVE
+# 15. SAVE FEATURES
 # ============================================================
 
 df.to_csv(

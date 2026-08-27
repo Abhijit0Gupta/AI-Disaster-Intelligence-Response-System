@@ -6,6 +6,8 @@ import matplotlib.pyplot as plt
 
 from joblib import load
 
+from sklearn.model_selection import train_test_split
+
 from sklearn.metrics import (
     accuracy_score,
     precision_score,
@@ -39,22 +41,31 @@ MODEL_FILE = (
     / "india_flood_impact_random_forest.pkl"
 )
 
-RESULTS_DIR = PROJECT_ROOT / "results"
-FIGURES_DIR = RESULTS_DIR / "figures"
-
-EVALUATION_FILE = (
-    RESULTS_DIR
-    / "india_evaluation_summary.csv"
-)
-
 IMPORTANCE_FILE = (
     PROJECT_ROOT
     / "models"
     / "india_feature_importance.csv"
 )
 
+RESULTS_DIR = (
+    PROJECT_ROOT
+    / "results"
+)
 
-# Create output directories
+FIGURES_DIR = (
+    RESULTS_DIR
+    / "figures"
+)
+
+EVALUATION_FILE = (
+    RESULTS_DIR
+    / "india_evaluation_summary.csv"
+)
+
+
+# ============================================================
+# 2. CREATE OUTPUT DIRECTORIES
+# ============================================================
 
 RESULTS_DIR.mkdir(
     parents=True,
@@ -68,7 +79,7 @@ FIGURES_DIR.mkdir(
 
 
 # ============================================================
-# 2. HEADER
+# 3. HEADER
 # ============================================================
 
 print("=" * 70)
@@ -77,7 +88,7 @@ print("=" * 70)
 
 
 # ============================================================
-# 3. CHECK FILES
+# 4. CHECK REQUIRED FILES
 # ============================================================
 
 print("\nChecking required files...")
@@ -99,23 +110,32 @@ print("Trained model found.")
 
 
 # ============================================================
-# 4. LOAD DATA
+# 5. LOAD FEATURE DATA
 # ============================================================
 
 print("\n" + "=" * 70)
-print("LOADING DATA")
+print("LOADING FEATURE DATA")
 print("=" * 70)
 
-df = pd.read_csv(FEATURE_FILE)
+df = pd.read_csv(
+    FEATURE_FILE
+)
 
 print("\nDataset loaded successfully!")
 
-print("Rows    :", len(df))
-print("Columns :", len(df.columns))
+print(
+    "Rows    :",
+    len(df)
+)
+
+print(
+    "Columns :",
+    len(df.columns)
+)
 
 
 # ============================================================
-# 5. TARGET
+# 6. TARGET
 # ============================================================
 
 TARGET = "High_Impact"
@@ -126,9 +146,14 @@ if TARGET not in df.columns:
         f"Target column '{TARGET}' not found."
     )
 
-print("\nTarget column:", TARGET)
+print(
+    "\nTarget column:",
+    TARGET
+)
 
-print("\nTarget distribution:")
+print(
+    "\nTarget distribution:"
+)
 
 print(
     df[TARGET]
@@ -138,24 +163,7 @@ print(
 
 
 # ============================================================
-# 6. LOAD MODEL
-# ============================================================
-
-print("\n" + "=" * 70)
-print("LOADING TRAINED MODEL")
-print("=" * 70)
-
-model = load(MODEL_FILE)
-
-print("\nModel loaded successfully!")
-
-print("Model type:")
-
-print(type(model).__name__)
-
-
-# ============================================================
-# 7. PREPARE X AND y
+# 7. SEPARATE FEATURES AND TARGET
 # ============================================================
 
 X = df.drop(
@@ -165,37 +173,20 @@ X = df.drop(
 y = df[TARGET].astype(int)
 
 
+# ============================================================
+# 8. REMOVE SAME COLUMNS AS TRAINING
+# ============================================================
+
 print("\n" + "=" * 70)
-print("FEATURE / TARGET INFORMATION")
+print("REMOVING NON-PREDICTIVE / HIGH-CARDINALITY COLUMNS")
 print("=" * 70)
 
-print("\nTotal samples :", len(X))
-
-print("Total features:", len(X.columns))
-
-
-# ============================================================
-# 8. REMOVE TARGET / LEAKAGE COLUMNS
-# ============================================================
-
-# These variables directly contain casualty information
-# and must not be used to predict High_Impact because
-# High_Impact itself was created from Human fatality.
-
-LEAKAGE_COLUMNS = [
-    "Human fatality",
-    "Human injured",
-    "Human Displaced",
-    "Animal Fatality",
-    "Description of Casualties/injured",
-    "Total_Human_Impact",
-    "Reported_Human_Impact"
+columns_to_drop = [
+    "Event Source",
+    "Districts"
 ]
 
-
-removed_columns = []
-
-for column in LEAKAGE_COLUMNS:
+for column in columns_to_drop:
 
     if column in X.columns:
 
@@ -203,134 +194,198 @@ for column in LEAKAGE_COLUMNS:
             columns=[column]
         )
 
-        removed_columns.append(column)
-
-
-if removed_columns:
-
-    print("\nLeakage-related columns excluded:")
-
-    for column in removed_columns:
-
-        print("-", column)
-
-else:
-
-    print("\nNo leakage-related columns found.")
+        print(
+            f"Removed: {column}"
+        )
 
 
 # ============================================================
-# 9. CHECK DATA TYPES
+# 9. LEAKAGE CHECK
 # ============================================================
 
 print("\n" + "=" * 70)
-print("FEATURE DATA CHECK")
+print("LEAKAGE CHECK")
 print("=" * 70)
 
-print("\nRemaining features:")
+LEAKAGE_COLUMNS = [
+    "Human fatality",
+    "Human injured",
+    "Human Displaced",
+    "Animal Fatality",
+    "Description of Casualties/injured",
+    "Extent of damage",
+    "Total_Human_Impact",
+    "Reported_Human_Impact"
+]
 
-print(
-    X.columns.tolist()
-)
+leakage_found = []
 
-print("\nMissing values:")
+for column in LEAKAGE_COLUMNS:
 
-missing_values = X.isnull().sum()
+    if column in X.columns:
 
-missing_values = (
-    missing_values[
-        missing_values > 0
-    ]
-)
+        leakage_found.append(
+            column
+        )
 
-if missing_values.empty:
+        X = X.drop(
+            columns=[column]
+        )
 
-    print("No missing values.")
+        print(
+            f"EXCLUDED: {column}"
+        )
 
-else:
+
+if not leakage_found:
 
     print(
-        missing_values.to_string()
+        "PASS: No known leakage columns found."
     )
 
 
 # ============================================================
-# 10. PREDICTIONS
+# 10. RECREATE SAME TRAIN / TEST SPLIT
 # ============================================================
 
 print("\n" + "=" * 70)
-print("GENERATING PREDICTIONS")
+print("RECREATING TEST SET")
+print("=" * 70)
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X,
+    y,
+    test_size=0.20,
+    random_state=42,
+    stratify=y
+)
+
+print(
+    "\nTraining samples:",
+    len(X_train)
+)
+
+print(
+    "Testing samples :",
+    len(X_test)
+)
+
+print(
+    "\nTesting target distribution:"
+)
+
+print(
+    y_test
+    .value_counts()
+    .sort_index()
+)
+
+
+# ============================================================
+# 11. LOAD TRAINED MODEL
+# ============================================================
+
+print("\n" + "=" * 70)
+print("LOADING TRAINED MODEL")
+print("=" * 70)
+
+model = load(
+    MODEL_FILE
+)
+
+print(
+    "\nModel loaded successfully!"
+)
+
+print(
+    "Model type:",
+    type(model).__name__
+)
+
+
+# ============================================================
+# 12. GENERATE TEST PREDICTIONS
+# ============================================================
+
+print("\n" + "=" * 70)
+print("GENERATING TEST SET PREDICTIONS")
 print("=" * 70)
 
 try:
 
-    y_pred = model.predict(X)
+    y_pred = model.predict(
+        X_test
+    )
 
     y_probability = (
-        model.predict_proba(X)[:, 1]
+        model.predict_proba(
+            X_test
+        )[:, 1]
     )
 
 except Exception as error:
 
-    print("\nERROR while generating predictions.")
+    print(
+        "\nERROR while generating predictions:"
+    )
 
     print(error)
-
-    print(
-        "\nThis usually means the evaluation data "
-        "does not match the features used during training."
-    )
 
     raise
 
 
-print("\nPredictions generated successfully!")
+print(
+    "\nTest predictions generated successfully!"
+)
 
 
 # ============================================================
-# 11. PERFORMANCE METRICS
+# 13. CALCULATE PERFORMANCE
 # ============================================================
-
-print("\n" + "=" * 70)
-print("MODEL PERFORMANCE")
-print("=" * 70)
-
 
 accuracy = accuracy_score(
-    y,
+    y_test,
     y_pred
 )
 
 precision = precision_score(
-    y,
+    y_test,
     y_pred,
     zero_division=0
 )
 
 recall = recall_score(
-    y,
+    y_test,
     y_pred,
     zero_division=0
 )
 
 f1 = f1_score(
-    y,
+    y_test,
     y_pred,
     zero_division=0
 )
 
 roc_auc = roc_auc_score(
-    y,
+    y_test,
     y_probability
 )
 
 average_precision = (
     average_precision_score(
-        y,
+        y_test,
         y_probability
     )
 )
 
+
+# ============================================================
+# 14. PRINT PERFORMANCE
+# ============================================================
+
+print("\n" + "=" * 70)
+print("TEST SET MODEL PERFORMANCE")
+print("=" * 70)
 
 print(
     f"\nAccuracy          : {accuracy:.4f}"
@@ -358,7 +413,7 @@ print(
 
 
 # ============================================================
-# 12. CONFUSION MATRIX
+# 15. CONFUSION MATRIX
 # ============================================================
 
 print("\n" + "=" * 70)
@@ -366,20 +421,24 @@ print("CONFUSION MATRIX")
 print("=" * 70)
 
 cm = confusion_matrix(
-    y,
+    y_test,
     y_pred
 )
 
-print("\n")
+print()
 
 print(cm)
 
+
+# ============================================================
+# 16. CLASSIFICATION REPORT
+# ============================================================
 
 print("\nClassification Report:")
 
 print(
     classification_report(
-        y,
+        y_test,
         y_pred,
         zero_division=0
     )
@@ -387,7 +446,7 @@ print(
 
 
 # ============================================================
-# 13. CONFUSION MATRIX PLOT
+# 17. CONFUSION MATRIX PLOT
 # ============================================================
 
 plt.figure(
@@ -407,17 +466,27 @@ plt.colorbar()
 
 plt.xticks(
     [0, 1],
-    ["Predicted 0", "Predicted 1"]
+    [
+        "Predicted 0",
+        "Predicted 1"
+    ]
 )
 
 plt.yticks(
     [0, 1],
-    ["Actual 0", "Actual 1"]
+    [
+        "Actual 0",
+        "Actual 1"
+    ]
 )
 
-for i in range(cm.shape[0]):
+for i in range(
+    cm.shape[0]
+):
 
-    for j in range(cm.shape[1]):
+    for j in range(
+        cm.shape[1]
+    ):
 
         plt.text(
             j,
@@ -452,7 +521,6 @@ plt.savefig(
 
 plt.close()
 
-
 print(
     "\nConfusion matrix saved to:"
 )
@@ -463,11 +531,11 @@ print(
 
 
 # ============================================================
-# 14. ROC CURVE
+# 18. ROC CURVE
 # ============================================================
 
 fpr, tpr, thresholds = roc_curve(
-    y,
+    y_test,
     y_probability
 )
 
@@ -520,7 +588,6 @@ plt.savefig(
 
 plt.close()
 
-
 print(
     "ROC curve saved to:"
 )
@@ -531,12 +598,12 @@ print(
 
 
 # ============================================================
-# 15. PRECISION-RECALL CURVE
+# 19. PRECISION-RECALL CURVE
 # ============================================================
 
 precision_values, recall_values, pr_thresholds = (
     precision_recall_curve(
-        y,
+        y_test,
         y_probability
     )
 )
@@ -584,7 +651,6 @@ plt.savefig(
 
 plt.close()
 
-
 print(
     "Precision-recall curve saved to:"
 )
@@ -595,345 +661,209 @@ print(
 
 
 # ============================================================
-# 16. FEATURE IMPORTANCE
+# 20. FEATURE IMPORTANCE
 # ============================================================
 
 print("\n" + "=" * 70)
 print("FEATURE IMPORTANCE")
 print("=" * 70)
 
+if not IMPORTANCE_FILE.exists():
 
-feature_importance = None
+    print(
+        "\nFeature importance file not found."
+    )
 
+    print(
+        "Skipping feature importance visualization."
+    )
 
-# ------------------------------------------------------------
-# Option 1: Read saved feature importance
-# ------------------------------------------------------------
+else:
 
-if IMPORTANCE_FILE.exists():
+    feature_importance = pd.read_csv(
+        IMPORTANCE_FILE
+    )
 
-    try:
-
-        saved_importance = pd.read_csv(
-            IMPORTANCE_FILE
-        )
-
-        if (
-            "Feature" in saved_importance.columns
-            and
-            "Importance" in saved_importance.columns
-        ):
-
-            feature_importance = (
-                saved_importance
-                .copy()
-            )
-
-            print(
-                "\nLoaded feature importance from:"
-            )
-
-            print(
-                IMPORTANCE_FILE
-            )
-
-    except Exception:
-
-        feature_importance = None
-
-
-# ------------------------------------------------------------
-# Option 2: Extract from model
-# ------------------------------------------------------------
-
-if feature_importance is None:
-
-    if hasattr(
-        model,
-        "feature_importances_"
+    if (
+        "Feature" not in feature_importance.columns
+        or
+        "Importance" not in feature_importance.columns
     ):
 
-        importance_values = (
-            model.feature_importances_
+        raise ValueError(
+            "Feature importance file must contain "
+            "'Feature' and 'Importance' columns."
         )
 
-        # Try to obtain feature names from
-        # preprocessing pipeline.
 
-        feature_names = None
-
-        try:
-
-            if hasattr(
-                model,
-                "named_steps"
-            ):
-
-                preprocessor = (
-                    model.named_steps
-                    .get("preprocessor")
-                )
-
-                classifier = (
-                    model.named_steps
-                    .get("classifier")
-                )
-
-                if preprocessor is not None:
-
-                    feature_names = (
-                        preprocessor
-                        .get_feature_names_out()
-                    )
-
-                    importance_values = (
-                        classifier
-                        .feature_importances_
-                    )
-
-        except Exception:
-
-            feature_names = None
-
-
-        if feature_names is None:
-
-            feature_names = np.array(
-                X.columns
-            )
-
-
-        if len(feature_names) != len(
-            importance_values
-        ):
-
-            raise ValueError(
-                "Feature importance length does not "
-                "match feature names."
-            )
-
-
-        feature_importance = pd.DataFrame({
-
-            "Feature":
-                feature_names,
-
-            "Importance":
-                importance_values
-
-        })
-
-
-# ------------------------------------------------------------
-# Sort importance
-# ------------------------------------------------------------
-
-feature_importance = (
-    feature_importance
-    .sort_values(
-        by="Importance",
-        ascending=False
+    feature_importance = (
+        feature_importance
+        .sort_values(
+            by="Importance",
+            ascending=False
+        )
+        .reset_index(
+            drop=True
+        )
     )
-    .reset_index(
-        drop=True
+
+
+    print(
+        "\nTop 20 features:"
     )
-)
 
-
-print("\nTop 20 features:")
-
-print(
-    feature_importance
-    .head(20)
-    .to_string(index=False)
-)
-
-
-# ============================================================
-# 17. SAVE FEATURE IMPORTANCE
-# ============================================================
-
-EVALUATION_IMPORTANCE_FILE = (
-    RESULTS_DIR
-    / "india_evaluation_feature_importance.csv"
-)
-
-feature_importance.to_csv(
-    EVALUATION_IMPORTANCE_FILE,
-    index=False
-)
-
-print(
-    "\nFeature importance table saved to:"
-)
-
-print(
-    EVALUATION_IMPORTANCE_FILE
-)
-
-
-# ============================================================
-# 18. FEATURE IMPORTANCE PLOT
-# ============================================================
-
-top_features = (
-    feature_importance
-    .head(15)
-    .sort_values(
-        by="Importance",
-        ascending=True
+    print(
+        feature_importance
+        .head(20)
+        .to_string(index=False)
     )
-)
 
 
-plt.figure(
-    figsize=(10, 7)
-)
+    # --------------------------------------------------------
+    # Save evaluation feature importance
+    # --------------------------------------------------------
 
-plt.barh(
-    top_features["Feature"],
-    top_features["Importance"]
-)
+    EVALUATION_IMPORTANCE_FILE = (
+        RESULTS_DIR
+        / "india_evaluation_feature_importance.csv"
+    )
 
-plt.xlabel(
-    "Importance"
-)
-
-plt.ylabel(
-    "Feature"
-)
-
-plt.title(
-    "Top 15 Feature Importances - Indian Flood Impact Model"
-)
-
-plt.tight_layout()
+    feature_importance.to_csv(
+        EVALUATION_IMPORTANCE_FILE,
+        index=False
+    )
 
 
-IMPORTANCE_PLOT = (
-    FIGURES_DIR
-    / "india_feature_importance.png"
-)
+    print(
+        "\nFeature importance table saved to:"
+    )
 
-plt.savefig(
-    IMPORTANCE_PLOT,
-    dpi=300,
-    bbox_inches="tight"
-)
-
-plt.close()
+    print(
+        EVALUATION_IMPORTANCE_FILE
+    )
 
 
-print(
-    "\nFeature importance plot saved to:"
-)
+    # --------------------------------------------------------
+    # Plot top 15 features
+    # --------------------------------------------------------
 
-print(
-    IMPORTANCE_PLOT
-)
+    top_features = (
+        feature_importance
+        .head(15)
+        .sort_values(
+            by="Importance",
+            ascending=True
+        )
+    )
+
+
+    plt.figure(
+        figsize=(10, 7)
+    )
+
+    plt.barh(
+        top_features["Feature"],
+        top_features["Importance"]
+    )
+
+    plt.xlabel(
+        "Importance"
+    )
+
+    plt.ylabel(
+        "Feature"
+    )
+
+    plt.title(
+        "Top 15 Feature Importances - Indian Flood Impact Model"
+    )
+
+    plt.tight_layout()
+
+
+    IMPORTANCE_PLOT = (
+        FIGURES_DIR
+        / "india_feature_importance.png"
+    )
+
+    plt.savefig(
+        IMPORTANCE_PLOT,
+        dpi=300,
+        bbox_inches="tight"
+    )
+
+    plt.close()
+
+
+    print(
+        "\nFeature importance plot saved to:"
+    )
+
+    print(
+        IMPORTANCE_PLOT
+    )
 
 
 # ============================================================
-# 19. LEAKAGE INVESTIGATION
+# 21. LEAKAGE VERIFICATION
 # ============================================================
 
 print("\n" + "=" * 70)
-print("LEAKAGE INVESTIGATION")
+print("FINAL LEAKAGE VERIFICATION")
 print("=" * 70)
 
+remaining_leakage = [
+    column
+    for column in LEAKAGE_COLUMNS
+    if column in X_test.columns
+]
 
-print(
-    "\nTarget definition:"
-)
+if remaining_leakage:
 
-print(
-    "High_Impact = 1 when Human fatality >= 10"
-)
+    print(
+        "WARNING: Leakage columns remain:"
+    )
 
-print(
-    "High_Impact = 0 when Human fatality < 10"
-)
-
-
-print(
-    "\nThe following casualty variables must NOT "
-    "be model inputs:"
-)
-
-for column in LEAKAGE_COLUMNS:
-
-    if column in df.columns:
+    for column in remaining_leakage:
 
         print(
             "-",
             column
         )
 
+else:
 
-print(
-    "\nThese variables were excluded from evaluation."
-)
-
-
-# ============================================================
-# 20. CHECK IMPORTANT FEATURES
-# ============================================================
-
-print(
-    "\nTop 10 features requiring interpretation:"
-)
-
-print(
-    feature_importance
-    .head(10)
-    .to_string(index=False)
-)
-
-
-print(
-    "\nIMPORTANT:"
-)
-
-print(
-    "High feature importance does not automatically "
-    "mean data leakage."
-)
-
-print(
-    "However, features that are proxies for the target "
-    "definition should be investigated before final reporting."
-)
+    print(
+        "PASS: No identified leakage columns "
+        "are present in the evaluation features."
+    )
 
 
 # ============================================================
-# 21. SAVE EVALUATION SUMMARY
+# 22. SAVE EVALUATION SUMMARY
 # ============================================================
 
-evaluation_summary = pd.DataFrame({
+evaluation_summary = pd.DataFrame(
+    {
+        "Metric": [
+            "Accuracy",
+            "Precision",
+            "Recall",
+            "F1 Score",
+            "ROC-AUC",
+            "Average Precision"
+        ],
 
-    "Metric": [
-
-        "Accuracy",
-        "Precision",
-        "Recall",
-        "F1 Score",
-        "ROC-AUC",
-        "Average Precision"
-
-    ],
-
-    "Value": [
-
-        accuracy,
-        precision,
-        recall,
-        f1,
-        roc_auc,
-        average_precision
-
-    ]
-
-})
+        "Value": [
+            accuracy,
+            precision,
+            recall,
+            f1,
+            roc_auc,
+            average_precision
+        ]
+    }
+)
 
 
 evaluation_summary.to_csv(
@@ -952,12 +882,17 @@ print(
 
 
 # ============================================================
-# 22. FINAL OUTPUT
+# 23. FINAL OUTPUT
 # ============================================================
 
 print("\n" + "=" * 70)
 print("INDIAN MODEL EVALUATION COMPLETE")
 print("=" * 70)
+
+print(
+    "\nTest samples:",
+    len(X_test)
+)
 
 print(
     f"\nAccuracy          : {accuracy:.4f}"
@@ -983,7 +918,6 @@ print(
     f"Average Precision : {average_precision:.4f}"
 )
 
-
 print("\nGenerated files:")
 
 print(
@@ -1001,23 +935,26 @@ print(
     PR_FILE
 )
 
-print(
-    "-",
-    IMPORTANCE_PLOT
-)
+if IMPORTANCE_FILE.exists():
 
-print(
-    "-",
-    EVALUATION_IMPORTANCE_FILE
-)
+    print(
+        "-",
+        IMPORTANCE_PLOT
+    )
+
+    print(
+        "-",
+        EVALUATION_IMPORTANCE_FILE
+    )
 
 print(
     "-",
     EVALUATION_FILE
 )
 
-
-print("\nNext stage:")
+print(
+    "\nNext stage:"
+)
 
 print(
     "Robust time-based validation"

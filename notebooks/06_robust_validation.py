@@ -294,6 +294,25 @@ y_test = test_df[TARGET].astype(int)
 
 
 # ============================================================
+# REMOVE NON-PREDICTIVE / HIGH-CARDINALITY COLUMNS
+# ============================================================
+
+columns_to_drop = [
+    "Event Source",
+    "Districts"
+]
+
+for column in columns_to_drop:
+
+    if column in X_train.columns:
+        X_train = X_train.drop(columns=[column])
+
+    if column in X_test.columns:
+        X_test = X_test.drop(columns=[column])
+
+    print(f"Removed: {column}")
+
+# ============================================================
 # 13. LEAKAGE CONTROL
 # ============================================================
 

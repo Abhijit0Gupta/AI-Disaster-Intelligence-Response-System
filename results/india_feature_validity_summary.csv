@@ -1,0 +1,22 @@
+Original_Feature,Validity,Reason,Importance
+State,VALID,"Can reasonably be used as a temporal, geographical, event, or cause-related predictor.",0.10782831026917487
+District_Count,VALID,"Can reasonably be used as a temporal, geographical, event, or cause-related predictor.",0.1074592456364823
+Start_Year,VALID,"Can reasonably be used as a temporal, geographical, event, or cause-related predictor.",0.1003021567437524
+Year,VALID,"Can reasonably be used as a temporal, geographical, event, or cause-related predictor.",0.0984072420538732
+Duration(Days),VALID,"Can reasonably be used as a temporal, geographical, event, or cause-related predictor.",0.0833182613483903
+Main Cause,VALID,"Can reasonably be used as a temporal, geographical, event, or cause-related predictor.",0.07650262118489229
+District_LGD_Codes,VALID,"Can reasonably be used as a temporal, geographical, event, or cause-related predictor.",0.0755599830323325
+Start_Day,VALID,"Can reasonably be used as a temporal, geographical, event, or cause-related predictor.",0.0647551035134637
+Day,VALID,"Can reasonably be used as a temporal, geographical, event, or cause-related predictor.",0.0644847790787608
+Cause_Group,VALID,"Can reasonably be used as a temporal, geographical, event, or cause-related predictor.",0.0470368923817708
+State_Codes,VALID,"Can reasonably be used as a temporal, geographical, event, or cause-related predictor.",0.0391047889919789
+Long_Event,VALID,"Can reasonably be used as a temporal, geographical, event, or cause-related predictor.",0.0306034569012592
+Start_Month,VALID,"Can reasonably be used as a temporal, geographical, event, or cause-related predictor.",0.0242479753209437
+Month,VALID,"Can reasonably be used as a temporal, geographical, event, or cause-related predictor.",0.0237548380643584
+Month_Cos,VALID,"Can reasonably be used as a temporal, geographical, event, or cause-related predictor.",0.0226122462732288
+Month_Sin,VALID,"Can reasonably be used as a temporal, geographical, event, or cause-related predictor.",0.0203555820799521
+Quarter,VALID,"Can reasonably be used as a temporal, geographical, event, or cause-related predictor.",0.0117520951264481
+State_Count,VALID,"Can reasonably be used as a temporal, geographical, event, or cause-related predictor.",0.001914421998929
+Districts,REVIEW,High-cardinality or reporting-related field. Requires manual review before operational use.,0.0
+Event Source,REVIEW,High-cardinality or reporting-related field. Requires manual review before operational use.,0.0
+Event_Source_Available,CAUTION,May depend on information availability after event reporting. Verify operational availability.,0.0

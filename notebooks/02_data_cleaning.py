@@ -227,6 +227,31 @@ print(
 )
 
 # ============================================================
+# 7B. DEFINE TARGET / OUTCOME COLUMNS
+# ============================================================
+
+TARGET_COLUMN = "High_Impact"
+
+OUTCOME_COLUMNS = [
+    "Human fatality",
+    "Human injured",
+    "Human Displaced",
+    "Animal Fatality",
+    "Description of Casualties/injured",
+    "Extent of damage",
+    "Area Affected"
+]
+
+print("\n" + "=" * 70)
+print("OUTCOME / LEAKAGE COLUMNS")
+print("=" * 70)
+
+for column in OUTCOME_COLUMNS:
+
+    if column in df.columns:
+        print(f"EXCLUDE FROM MODEL: {column}")
+
+# ============================================================
 # 8. CLEAN CATEGORICAL VARIABLES
 # ============================================================
 

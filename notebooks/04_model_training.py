@@ -9,6 +9,7 @@ from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OneHotEncoder
 from sklearn.impute import SimpleImputer
 from sklearn.ensemble import RandomForestClassifier
+
 from sklearn.metrics import (
     accuracy_score,
     precision_score,
@@ -47,6 +48,13 @@ FEATURE_FILE = (
     / "india_feature_importance.csv"
 )
 
+RESULTS_DIR = PROJECT_ROOT / "results"
+
+SUMMARY_FILE = (
+    RESULTS_DIR
+    / "india_model_training_summary.csv"
+)
+
 
 # ============================================================
 # 2. LOAD DATA
@@ -66,15 +74,8 @@ df = pd.read_csv(INPUT_FILE)
 
 print("\nDataset loaded successfully!")
 
-print(
-    "Rows    :",
-    len(df)
-)
-
-print(
-    "Columns :",
-    len(df.columns)
-)
+print("Rows    :", len(df))
+print("Columns :", len(df.columns))
 
 
 # ============================================================
@@ -93,10 +94,7 @@ print("\n" + "=" * 70)
 print("TARGET INFORMATION")
 print("=" * 70)
 
-print(
-    "Target column:",
-    TARGET
-)
+print("Target column:", TARGET)
 
 print("\nTarget distribution:")
 
@@ -108,7 +106,7 @@ print(
 
 
 # ============================================================
-# 4. SEPARATE X AND y
+# 4. SEPARATE FEATURES AND TARGET
 # ============================================================
 
 X = df.drop(
@@ -133,7 +131,7 @@ print(
 
 
 # ============================================================
-# 5. REMOVE NON-PREDICTIVE / HIGH-CARDINALITY TEXT
+# 5. REMOVE NON-PREDICTIVE / HIGH-CARDINALITY COLUMNS
 # ============================================================
 
 columns_to_drop = [
@@ -150,38 +148,51 @@ for column in columns_to_drop:
         )
 
         print(
-            f"Removed high-cardinality column: {column}"
+            f"Removed column: {column}"
         )
 
 
 # ============================================================
-# 6. IDENTIFY COLUMN TYPES
+# 6. IDENTIFY FEATURE TYPES
 # ============================================================
 
-numeric_features = X.select_dtypes(
-    include=["number"]
-).columns.tolist()
+numeric_features = (
+    X
+    .select_dtypes(
+        include=["number"]
+    )
+    .columns
+    .tolist()
+)
 
-categorical_features = X.select_dtypes(
-    include=["object", "string"]
-).columns.tolist()
+categorical_features = (
+    X
+    .select_dtypes(
+        include=["object", "string"]
+    )
+    .columns
+    .tolist()
+)
 
 print("\nNumeric features:")
 
-print(
-    numeric_features
-)
+for column in numeric_features:
+    print("-", column)
 
 print("\nCategorical features:")
 
-print(
-    categorical_features
-)
+for column in categorical_features:
+    print("-", column)
 
 
 # ============================================================
 # 7. PREPROCESSING
 # ============================================================
+
+print("\n" + "=" * 70)
+print("PREPROCESSING")
+print("=" * 70)
+
 
 numeric_pipeline = Pipeline(
     steps=[
@@ -231,6 +242,11 @@ preprocessor = ColumnTransformer(
 )
 
 
+print("Numeric missing values -> median imputation")
+print("Categorical missing values -> most-frequent imputation")
+print("Categorical variables -> One-Hot Encoding")
+
+
 # ============================================================
 # 8. TRAIN / TEST SPLIT
 # ============================================================
@@ -260,14 +276,16 @@ print(
 print("\nTraining target distribution:")
 
 print(
-    y_train.value_counts()
+    y_train
+    .value_counts()
     .sort_index()
 )
 
 print("\nTesting target distribution:")
 
 print(
-    y_test.value_counts()
+    y_test
+    .value_counts()
     .sort_index()
 )
 
@@ -514,11 +532,6 @@ print(
 # 17. SAVE PERFORMANCE SUMMARY
 # ============================================================
 
-RESULTS_DIR = (
-    PROJECT_ROOT
-    / "results"
-)
-
 RESULTS_DIR.mkdir(
     parents=True,
     exist_ok=True
@@ -541,11 +554,6 @@ summary = pd.DataFrame(
             roc_auc
         ]
     }
-)
-
-SUMMARY_FILE = (
-    RESULTS_DIR
-    / "india_model_training_summary.csv"
 )
 
 summary.to_csv(
@@ -581,7 +589,7 @@ print(
 )
 
 print(
-    "Original features:",
+    "Model features   :",
     X.shape[1]
 )
 
@@ -606,6 +614,12 @@ print(
 print(
     f"ROC-AUC   : {roc_auc:.4f}"
 )
+
+print("\nSaved files:")
+
+print(MODEL_FILE)
+print(FEATURE_FILE)
+print(SUMMARY_FILE)
 
 print("\nNext stage:")
 print("Model Evaluation / Visualization")

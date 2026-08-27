@@ -1,0 +1,250 @@
+Feature,Importance
+numeric__District_Count,0.10494939206253713
+numeric__Duration(Days),0.09144008373530901
+numeric__Start_Year,0.07712833076554182
+numeric__Year,0.07613545924120341
+numeric__Start_Day,0.07433229583593644
+numeric__Day,0.07427160248123112
+numeric__District_LGD_Codes,0.06888079836563192
+numeric__State_Codes,0.04719386474578976
+numeric__Long_Event,0.02975671019662174
+numeric__Month,0.026422913263950926
+numeric__Start_Month,0.02572526268550166
+numeric__Month_Cos,0.024202762638548883
+categorical__Cause_Group_Heavy Rain,0.02330181768025662
+numeric__Month_Sin,0.0226316539876462
+categorical__Main Cause_heavy rains,0.019789035240418817
+categorical__Cause_Group_Other,0.017340317384840053
+numeric__Quarter,0.012610684048948705
+categorical__State_Maharashtra,0.009511062520525082
+categorical__State_Karnataka,0.009329186202720736
+categorical__State_Uttar Pradesh,0.007483339897184497
+categorical__State_West Bengal,0.00693714774111294
+categorical__Main Cause_severe,0.006569149572186445
+categorical__State_Gujarat,0.0065034964002306855
+categorical__State_Kerala,0.006416550187783338
+categorical__State_Assam,0.00562677581880445
+categorical__State_Uttarakhand,0.005209644236275137
+categorical__Main Cause_severe flood,0.005162645192152938
+categorical__State_Madhya Pradesh,0.005134332370859695
+categorical__State_Rajasthan,0.0049441962676931754
+categorical__State_Bihar,0.004717014692458895
+categorical__State_Himachal Pradesh,0.004544419576019323
+categorical__State_Andhra Pradesh,0.00448091092630921
+categorical__State_Jammu and Kashmir,0.0043679156576972794
+categorical__State_Punjab,0.004304422817716321
+categorical__State_Odisha,0.004210313090503111
+categorical__Cause_Group_Flash Flood,0.0041081573220132315
+categorical__State_Tamil Nadu,0.004105882839393759
+categorical__Main Cause_severe floods,0.003620659958886092
+categorical__State_Haryana,0.0035210721693690722
+categorical__Main Cause_flash flood,0.003454499462247976
+categorical__State_Delhi,0.0033302653261475614
+categorical__State_Arunachal Pradesh,0.0032224988059606644
+categorical__State_Tripura,0.0024162214362155746
+categorical__Main Cause_moderate flood,0.0022328907041546968
+categorical__State_Jharkhand,0.0021550606127811113
+categorical__Main Cause_moderate floods,0.0020815893093322985
+categorical__State_Meghalaya,0.0018089289101133343
+categorical__Cause_Group_River/Water System,0.0017965013186460193
+categorical__Main Cause_flash floods,0.0016942981872986442
+categorical__State_Sikkim,0.0016820707661515649
+numeric__State_Count,0.0016714089594418462
+"categorical__State_Uttar Pradesh, Uttarakhand",0.0015020614148311935
+categorical__Main Cause_flood,0.0014798080137080711
+categorical__State_Mizoram,0.001202317952464189
+categorical__Main Cause_moderate,0.0011857166761371726
+categorical__Main Cause_moderate to severe,0.0011352148377796211
+categorical__State_Chhattisgarh,0.0011278084894739938
+categorical__Main Cause_floods,0.001119172533226024
+"categorical__State_Madhya Pradesh,  Chhattisgarh",0.0010530561311447094
+categorical__Main Cause_cloud burst,0.001037050298432448
+categorical__State_Manipur,0.0006921233490579731
+"categorical__Main Cause_severe flood (brahmaputra,tributaries)",0.0005559744065822752
+categorical__Main Cause_heavy rains(cloud burst),0.0005347146076872838
+"categorical__Main Cause_severe flood, heavy rains",0.00048558529906493213
+"categorical__Main Cause_heavy rains, severe",0.00046781615412850376
+categorical__Main Cause_heavy rains/tank burnt,0.0004536132363959883
+categorical__Main Cause_severe floods in rivulets,0.00043144550802907744
+categorical__Main Cause_severe flood (doyang),0.00040306039625055196
+"categorical__Main Cause_severe flood (noona, tributaries of brahmaputra)",0.00038980494105648106
+"categorical__Main Cause_wardha,its tributaries  in floods due to continuus heavy rains",0.0003789545867758673
+categorical__State_Nagaland,0.00036107160409569667
+"categorical__Main Cause_severe flood (brahmaputra,its tributaries)",0.0003353230995388423
+categorical__Main Cause_severe flood(yamuna),0.00032562968065209764
+categorical__State_Goa,0.00032391814579789863
+categorical__Main Cause_heavy rains (cloud burst),0.0003155929350938053
+"categorical__Main Cause_brahmaputra,its tributaries in floods",0.00031316820776746947
+"categorical__Main Cause_severe flood (brahmaputra,manas, pachnoi)",0.00030532539065059283
+"categorical__Main Cause_severe flood(bijoy,khowai)",0.0002825357133390888
+"categorical__Main Cause_moderate flood (imphal, iril, nambul, thoubal,wangiing",0.0002719226719371904
+categorical__Main Cause_severe(flash flooding),0.0002646687944922791
+categorical__Main Cause_torrential rains,0.0002555176793743192
+"categorical__Main Cause_flood (brahmaputra,its tributaries)",0.00024848996981111576
+"categorical__Main Cause_moderate(brahmi,baitarni)",0.00024707286569509415
+categorical__Main Cause_severe (flash flooding in bhima),0.00024255804362112126
+categorical__Main Cause_flood(dhasan),0.0002398282131078589
+"categorical__Main Cause_severe flood (satluj, yamuna)",0.00023970987243447872
+categorical__Main Cause_moderate (tunga river),0.0002361840882978444
+"categorical__Main Cause_heavy rains, moderate, severe",0.0002347491319155793
+"categorical__Main Cause_severe(baksa,its tributaries)",0.00023444657385755848
+categorical__Main Cause_floods in pennar river,0.00022833581526132598
+"categorical__Main Cause_severe floods, heavy rains",0.00022651895540927666
+"categorical__Main Cause_severe flood (bharali, jaidhal, jia, semen)",0.00022493888994846317
+"categorical__Main Cause_flash flood (darika,tiak)",0.00022320272339550003
+categorical__Main Cause_flash flood (brahmaputra & kaldiya),0.0002229022953748563
+categorical__Main Cause_severe (flash flooding),0.0002216603655806383
+"categorical__Main Cause_flood (dikchu, lachen, lachung, rangpo,singtam)",0.00022146811523738856
+categorical__Main Cause_heav rains,0.00022129018114262753
+categorical__Main Cause_severe (godavari),0.0002199899879971141
+"categorical__Main Cause_moderate floods in chenab,tawi rivers",0.00021840871421809372
+"categorical__Main Cause_heavy rains, moderate floods",0.000212479749982517
+"categorical__Main Cause_heavy rains,moderate floods",0.0002085139463725631
+categorical__State_Telangana,0.00020592293243285492
+categorical__Main Cause_flood (cloud burst),0.0002043291523170386
+"categorical__Main Cause_heavy rains, flash flood",0.00019823898574899734
+"categorical__Main Cause_flood (ghagra,sharada)",0.00019199063165798737
+"categorical__Main Cause_flood (ganga, yamuna,sarayu)",0.00019048713424759433
+"categorical__Main Cause_flash flood (jhelum, chenab)",0.00019029736961056755
+"categorical__Main Cause_heavy rains, severe flood",0.00018997600508026825
+categorical__Main Cause_moderate(berna),0.0001889974534848968
+"categorical__Main Cause_flood (brahmaputra,its tributories)",0.0001883679562804788
+"categorical__Main Cause_severe flood(brahmaputra,its tributaries)",0.00018802184330188112
+"categorical__Main Cause_flash flood (ghatprabha, hiranyakeshi, kaveri, tunga,many other rivers)",0.00018768601943656215
+"categorical__Main Cause_flood (ganga, ghaghara, magari,tansa)",0.00018201776963574657
+"categorical__Main Cause_heavy rains,floods",0.0001778590894993656
+categorical__State_Dadra and Nagar Haveli,0.00017492288375075014
+"categorical__Main Cause_severe(brahmaputra,its tributaries)",0.00017353142174161138
+categorical__Main Cause_torrential rain,0.0001735160013224255
+"categorical__Main Cause_flood (beki,puthimari)",0.0001732765077169986
+"categorical__Main Cause_severe (ne travathi, sharavathi, aghana shini. & varada rivers.",0.00017320836338491713
+"categorical__Main Cause_heavy rains,flash floods",0.00016520019851657376
+"categorical__Main Cause_severe flood (ganga,its tributaries)",0.00016398520367281566
+"categorical__Main Cause_moderate to severe, moderate",0.00016290207415615903
+categorical__Main Cause_severe flood (cloud burst),0.00016244950862506243
+"categorical__Main Cause_severe (kalawli, vashishti,shastri)",0.00016201129699209177
+"categorical__Main Cause_flash flood (jiadhal,semen)",0.00016145949785369384
+categorical__Main Cause_narmada river in spate,0.00016017162411025615
+"categorical__Main Cause_moderate(kolab,indravati)",0.000157568280867839
+"categorical__Main Cause_severe flood (jiadhal,semen)",0.00015655959400067993
+categorical__Main Cause_flash floods in lohit river,0.00015340619610212282
+"categorical__Main Cause_flood (krishna, nagavalli, tungabhadra,vamsadhara)",0.00014989340273297691
+"categorical__Main Cause_flash flood, heavy rain",0.00014877723043781748
+"categorical__Main Cause_severe (betwa,kunwari)",0.00014471861349650165
+categorical__Main Cause_flash flood(tambraparni river),0.0001429335935520502
+categorical__Main Cause_severe flood (ker),0.00013419352180139163
+categorical__Main Cause_heavy rains due to cloud burst,0.00013373821948485913
+categorical__Main Cause_heavyh rains,0.00013217761467812863
+"categorical__Main Cause_flash flood(brahmaputra,its tributaries)",0.00013014244669061874
+categorical__Main Cause_flash flood or moderate flood,0.00012887154768922898
+categorical__Main Cause_heavy rains.,0.00012619627488825443
+"categorical__Main Cause_severe (ulhas,batsa-kalu)",0.00012572867817365767
+"categorical__Main Cause_torential rain,heavy floods",0.00012512358029655976
+"categorical__Main Cause_severe (godavari, manjira, lendi,manya)",0.00012376648274024197
+"categorical__Main Cause_severe (ganga, yamuna,their tributaries)",0.00012074521670994784
+categorical__Main Cause_inceasant rains,0.00011980886843440138
+categorical__Main Cause_heavy rains(khari),0.0001147544785920878
+categorical__Main Cause_flood (yamuna),0.00011346508102292196
+"categorical__Main Cause_severe(flash flooding in palar,mahakamanta)",0.00011138623281654461
+"categorical__Main Cause_flood ( ganga,phulhar)",0.00011068040603718863
+"categorical__State_Bihar, Jharkhand",0.0001078435221296053
+categorical__State_Chandigarh,0.00010644363253695921
+categorical__Main Cause_severe (flash floods),0.00010094839874408247
+"categorical__Main Cause_heavy rains, (flooding of tawi river.)",0.00010074964326933405
+"categorical__Main Cause_flood(jagbudi, kajali,vashishthi)",0.00010043964361852659
+categorical__Main Cause_flood (ghaghra),0.00010006839303588965
+categorical__Main Cause_severe flood(brahmaputra),9.91704375625321e-05
+categorical__Main Cause_flash floods in rambhan stream by a cloud burst,9.909889693190163e-05
+categorical__Main Cause_moderate flood (cloud burst),9.892231706369542e-05
+categorical__Main Cause_flash flood (jhelum),9.79225339207799e-05
+categorical__Main Cause_moderate (kajihi),9.737348370673023e-05
+"categorical__Main Cause_moderate flood (brahmani,baitarani)",9.309462182243217e-05
+"categorical__Main Cause_heavy rains , severe flood",9.267719328382741e-05
+"categorical__Main Cause_flood (mahanadi,its tributaries)",9.260487743061593e-05
+categorical__Main Cause_flood (ujh),8.931672016868353e-05
+"categorical__Main Cause_flash flood (brahmaputra,its tributaries)",8.637826812258504e-05
+categorical__Main Cause_severe (mahanadi river),8.352006606018284e-05
+"categorical__Main Cause_severe flood (narmada,its tributaries)",8.344623168950707e-05
+categorical__Main Cause_floash flood(jinjiram andrangai),8.165024326626028e-05
+categorical__Main Cause_flood (krishnavati),7.794494960024884e-05
+"categorical__Main Cause_rohini, rapti, burhi gandak, sharda, ghagra in floods",7.784649948006621e-05
+categorical__Main Cause_flash flood (baghmati),7.66945053678554e-05
+"categorical__Main Cause_flash flood (narmada,tapi)",7.580287504902122e-05
+categorical__Main Cause_incessant heavy rains,7.388377776302863e-05
+"categorical__Main Cause_severe (krishna, ghatprabha,vedganga)",7.091569359804171e-05
+"categorical__Main Cause_severe flood(saktola,pahumora)",6.980129572949277e-05
+"categorical__Main Cause_severe(unprecedented flooding of shastri,tonvi rivers)",6.842375091697151e-05
+"categorical__Main Cause_flood (bramhaputra,its tributaries, tiyak,kakajan)",6.556726235190241e-05
+categorical__Main Cause_flood (ganga),6.355911282693783e-05
+categorical__Main Cause_severe flood (mahanadi & its tributaries),6.335791786803219e-05
+"categorical__Main Cause_severe (ujen,ojat)",6.309618716265965e-05
+categorical__Main Cause_flood (gainadi ),6.030456604704258e-05
+categorical__Main Cause_very severe,6.0023646265995937e-05
+"categorical__Main Cause_flash flood(baksa, dhaleswari,kushiara)",5.754267218916523e-05
+"categorical__State_Rajasthan, Bihar, Madhya Pradesh, Gujarat, Maharashtra, Uttar Pradesh",5.648339697012271e-05
+categorical__Main Cause_incessant rains,5.420635087030702e-05
+"categorical__Main Cause_flood (beas, ghagar, sutlej)",5.1460465191668334e-05
+categorical__Main Cause_heavy rains following cloud burst,5.114091533661981e-05
+"categorical__Main Cause_severe flood (bias, satlaj,ravi)",5.008482279109291e-05
+"categorical__Main Cause_flash flood (bagmati, kamla balan, mahanadi, burhi gandak,adhwara)",4.927024247177149e-05
+categorical__Main Cause_severe floods in dhundh river.,4.869921136275284e-05
+"categorical__Main Cause_severe, heavy rains",4.866039350601171e-05
+"categorical__State_Uttar Pradesh, Bihar, Odisha, West Bengal",4.8218412431958436e-05
+"categorical__Main Cause_flash flood (bhorali,gangadhar)",4.808589134939326e-05
+categorical__Main Cause_heavy  rains,4.5479475653030624e-05
+categorical__Main Cause_continuous heavy rains,4.540557713507856e-05
+"categorical__Main Cause_severe flood(mahanadi,its triutaries)",4.3492293525669234e-05
+"categorical__Main Cause_severe(godavari, krishna, bhima, pravara, koyna, manjura, manwad, lendi, kayadu, penganga,warna)",4.199962325027955e-05
+"categorical__Main Cause_flodds in rapti, burhi,ghagra rivers",4.009360185906299e-05
+"categorical__Main Cause_severe flood (dikhow, desang, brahmaputra)",3.907593007143971e-05
+"categorical__Main Cause_flood (karamana, neyyak,vamanapuram)",3.793887798740976e-05
+"categorical__Main Cause_modern floods, flash floods, heavy rains",3.743190478350568e-05
+categorical__Main Cause_severe(all the major rivers),3.601189971374043e-05
+categorical__Main Cause_severe flood(tapi),3.5783180727148524e-05
+"categorical__State_Goa, Daman and Diu",3.5119632559474805e-05
+categorical__Main Cause_severe(flooding of all major rivers),3.5097511231890046e-05
+"categorical__Main Cause_severe flood( ganga,its tributaries)",3.353894739774257e-05
+"categorical__Main Cause_severe flood(adhwara, burhi gandak, gandak, kosi,pun pun",3.0178984198362427e-05
+categorical__Main Cause_flash flood (krishna),2.984309035373192e-05
+"categorical__State_Goa, Daman & Diu",2.971373975725608e-05
+categorical__Main Cause_severe flood (kosi),2.9604159608952943e-05
+"categorical__Main Cause_moderate flood(ganga, yamuna,sohali)",2.6885885598777597e-05
+"categorical__State_Himachal Pradesh, Uttar Pradesh, Bihar,  West Bengal",2.5604151028161312e-05
+"categorical__Main Cause_flood (indrayani, mula, panchganga, pavana)",2.5205069764728686e-05
+"categorical__Main Cause_flash flood (krishna, ghatprabha,malprabha)",2.4459502182683716e-05
+categorical__Main Cause_severe food,2.4367851465147974e-05
+"categorical__Main Cause_rivers gomti, ghagra,tapti in floods",2.293402246879621e-05
+"categorical__Main Cause_flood (bhima, bindusara,chandrabhaga)",2.2698847448030453e-05
+"categorical__State_Uttar Pradesh, Bihar",2.2049410659635534e-05
+"categorical__Main Cause_severe flood . (brahmaputra,its tributaries)",2.1814905788370404e-05
+categorical__Main Cause_flash flood (palem),2.0983030944951556e-05
+"categorical__Main Cause_severe( godavari, dudhana,poorna)",2.070732804368772e-05
+"categorical__Main Cause_severe flood (narmada,sabarmati)",2.0256359417066012e-05
+"categorical__Main Cause_heavy rains, floods",1.9598613893141323e-05
+"categorical__Main Cause_severe flood(bagmati, kosi,kamala balan)",1.940556918484766e-05
+"categorical__State_Assam, Manipur, Arunachal Pradesh",1.9083668401114083e-05
+"categorical__State_Andhra Pradesh, Telangana",1.7655347419029817e-05
+categorical__Main Cause_severe flood (ghaghara),1.7477443127973763e-05
+categorical__Main Cause_flood (gomati),1.6533467145292707e-05
+"categorical__Main Cause_severe flood(adhwara, bagmati, burhi gandak, gandak, ganga, ghagra, kamla balan, kosi, kreh, mahananda, punpun,sone)",1.59782207249281e-05
+"categorical__Main Cause_severe flood (tapi,mahanadi)",1.5390952642862416e-05
+"categorical__Main Cause_severe flood  (ganga,its tributaries)",1.4850809318222306e-05
+"categorical__Main Cause_severe(ganga, yamuna,their tributaries, ghagra, rapti, gomti,burhi-gandak,betwa) )",1.3766001576662132e-05
+categorical__Main Cause_heay rains,1.3626691415205822e-05
+"categorical__State_Bihar, Odisha, West Bengal, Assam, Andhra Pradesh",1.2794901996026332e-05
+categorical__Main Cause_severe floodi) (narmada),1.2513516670431931e-05
+categorical__Main Cause_flood (mahanadi),1.2426726536220755e-05
+categorical__Main Cause_flash flood (brahmaputra),1.1609398092171182e-05
+"categorical__Main Cause_moderate, severe",1.0530040322677781e-05
+"categorical__Main Cause_severe (mahanadi, brahmani, baitarni & devi rivers)",1.0494310575604117e-05
+"categorical__Main Cause_flash flood (godavari,rivulets)",1.0384138625655569e-05
+"categorical__Main Cause_severe, moderate to severe",9.468151939046891e-06
+"categorical__State_Jammu and Kashmir, Punjab, Uttar Pradesh, Assam,  Arunachal Pradesh",7.987203057510205e-06
+"categorical__State_Rajasthan, Punjab, Uttar Pradesh",7.985911102672278e-06
+"categorical__Main Cause_severe(ganga , yamuna, ken shandrawal, rapti, sarju, gadri,ghagra )",7.846354185628215e-06
+"categorical__State_Uttar Pradesh , Uttarakhand",7.831336465125889e-06
+"categorical__Main Cause_floods in ghagra, rapti , burhi,kawano",7.046071717414731e-06
+"categorical__Main Cause_severe flood(ganga,its  tributaries)",6.476296827990097e-06
+"categorical__State_Odisha, Bihar, Assam, West Bengal",5.589685190458384e-06
+"categorical__Main Cause_severe flood(ganga, bagmati, kosi, mahananda. adhwara, gandak,burhi gandak)",3.433082608929985e-06
+numeric__Event_Source_Available,0.0

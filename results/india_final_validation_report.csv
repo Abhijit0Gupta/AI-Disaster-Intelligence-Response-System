@@ -1,0 +1,22 @@
+Category,Metric,Value
+Final Status,Overall_Status,READY
+Data Split,Training_Start_Year,1970.0
+Data Split,Training_End_Year,2012.0
+Data Split,Testing_Start_Year,2013.0
+Data Split,Testing_End_Year,2023.0
+Data,Training_Rows,2138.0
+Data,Testing_Rows,1631.0
+Performance,Accuracy,0.8896382587369712
+Performance,Precision,0.651685393258427
+Performance,Recall,0.2801932367149758
+Performance,F1_Score,0.3918918918918919
+Performance,ROC_AUC,0.8070550398957824
+Performance,Average_Precision,0.4652772492361314
+Feature_Validity,Valid_Features,18
+Feature_Validity,Caution_Features,1
+Feature_Validity,Invalid_Features,0
+Feature_Validity,Review_Features,2
+Leakage,Direct_Leakage_Status,PASS
+Threshold,Best_F1_Threshold,0.4
+Threshold,Best_F1,0.4608501118568233
+Threshold,Default_0.50_F1,0.3918918918918919

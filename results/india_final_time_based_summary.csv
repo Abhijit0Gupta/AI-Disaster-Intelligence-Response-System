@@ -1,0 +1,15 @@
+Metric,Value
+Training_Start_Year,1970.0
+Training_End_Year,2012.0
+Testing_Start_Year,2013.0
+Testing_End_Year,2023.0
+Training_Rows,2138.0
+Testing_Rows,1631.0
+Features_Before_Encoding,19.0
+Encoded_Features,249.0
+Accuracy,0.8896382587369712
+Precision,0.651685393258427
+Recall,0.28019323671497587
+F1_Score,0.3918918918918919
+ROC_AUC,0.8070550398957824
+Average_Precision,0.46527724923613145
