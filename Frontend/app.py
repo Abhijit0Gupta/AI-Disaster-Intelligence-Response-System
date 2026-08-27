@@ -411,7 +411,36 @@ if analyze:
         st.error("Affected population must be greater than 0.")
 
         st.stop()
+        payload = {
+        "disaster_type": disaster_type,
+        "location": location,
+        "rainfall": rainfall,
+        "water_level": water_level,
+        "affected_population": affected_population,
+        "damage_percentage": damage_percentage
+    }
 
+    try:
+        response = requests.post(
+            API_URL,
+            json=payload,
+            timeout=10
+        )
+
+        response.raise_for_status()
+
+        result = response.json()
+
+    except requests.exceptions.ConnectionError:
+        st.error(
+            "Cannot connect to the backend. "
+            "Make sure the FastAPI server is running on port 8000."
+        )
+        st.stop()
+
+    except requests.exceptions.RequestException as e:
+        st.error(f"Backend error: {e}")
+        st.stop()    
     # --------------------------------------------------------
     # RISK ENGINE
     # --------------------------------------------------------
