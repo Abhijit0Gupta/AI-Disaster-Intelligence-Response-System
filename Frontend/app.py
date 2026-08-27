@@ -461,21 +461,13 @@ if analyze:
     # TRANSPORT RISK
     # --------------------------------------------------------
 
-    transport_risk = calculate_transport_risk(
-        rainfall,
-        water_level,
-        damage_percentage
-    )
+    transport_risk = result["transport_risk"]
 
     # --------------------------------------------------------
     # FACILITY RISK
     # --------------------------------------------------------
 
-    facility_risk = calculate_facility_risk(
-        affected_population,
-        damage_percentage,
-        water_level
-    )
+    facility_risk = result["facility_risk"]
 
     # --------------------------------------------------------
     # RESOURCE ALLOCATION
