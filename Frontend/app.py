@@ -445,13 +445,9 @@ if analyze:
     # RISK ENGINE
     # --------------------------------------------------------
 
-    risk_score, risk_level = calculate_risk(
-        disaster_type,
-        rainfall,
-        water_level,
-        affected_population,
-        damage_percentage
-    )
+    risk_score = result["risk"]["score"]
+    risk_level = result["risk"]["level"]
+    priority = result["risk"]["priority"]
 
     # --------------------------------------------------------
     # DAMAGE ENGINE
