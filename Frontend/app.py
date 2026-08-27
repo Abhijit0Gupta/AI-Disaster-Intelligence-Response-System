@@ -787,10 +787,7 @@ if analyze:
         unsafe_allow_html=True
     )
 
-    actions = generate_actions(
-        disaster_type,
-        risk_level
-    )
+    actions = result["actions"]
 
     for action in actions:
         st.write(action)
