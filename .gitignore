@@ -1,6 +1,7 @@
 # Python
 __pycache__/
-*.pyc
+*.py[cod]
+*.pyo
 .venv/
 venv/
 env/
@@ -16,16 +17,19 @@ env/
 .DS_Store
 Thumbs.db
 
-# Python cache / temporary
-*.tmp
+# Python environment
+*.egg-info/
+
+# Logs
 *.log
 
-# Large/generated datasets
-data/raw/*.csv
-data/processed/*.csv
+# Temporary files
+*.tmp
 
-# Generated model files
-models/*.pkl
+# Large ML artifacts
+*.npy
 
-# Generated results
-results/figures/
+# Keep trained models if required
+# *.pkl
+
+# Keep project data/results unless intentionally excluded

@@ -1,0 +1,2 @@
+Model,Accuracy,Precision,Recall,F1,ROC_AUC,False_Negatives,False_Positives,Best_Parameters
+Random Forest Optimized,0.9451476793248945,0.9453681710213777,0.9925187032418953,0.9683698296836983,0.9910156116557921,3,23,"{'max_depth': None, 'min_samples_leaf': 1, 'min_samples_split': 2, 'n_estimators': 200}"
