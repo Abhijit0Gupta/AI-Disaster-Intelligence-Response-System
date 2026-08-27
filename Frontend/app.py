@@ -411,14 +411,14 @@ if analyze:
         st.error("Affected population must be greater than 0.")
 
         st.stop()
-        payload = {
-        "disaster_type": disaster_type,
-        "location": location,
-        "rainfall": rainfall,
-        "water_level": water_level,
-        "affected_population": affected_population,
-        "damage_percentage": damage_percentage
-    }
+    payload = {
+    "disaster_type": disaster_type,
+    "location": location,
+    "rainfall": rainfall,
+    "water_level": water_level,
+    "affected_population": affected_population,
+    "damage_percentage": damage_percentage
+    }   
 
     try:
         response = requests.post(
@@ -653,23 +653,22 @@ if analyze:
         unsafe_allow_html=True
     )
 
-    rainfall_component = clamp((rainfall / 200) * 25)
-    water_component = clamp((water_level / 5) * 25)
-    population_component = clamp((affected_population / 10000) * 20)
-    damage_component = clamp((damage_percentage / 100) * 25)
+    risk_breakdown_result = result["risk_breakdown"]
 
     risk_breakdown = pd.DataFrame({
         "Factor": [
             "Rainfall",
             "Water Level",
             "Population Impact",
-            "Damage"
+            "Damage",
+            "Disaster Type"
         ],
         "Risk Contribution": [
-            rainfall_component,
-            water_component,
-            population_component,
-            damage_component
+            risk_breakdown_result["rainfall"],
+            risk_breakdown_result["water_level"],
+            risk_breakdown_result["population"],
+            risk_breakdown_result["damage"],
+            risk_breakdown_result["disaster_type"]
         ]
     })
 
