@@ -473,41 +473,21 @@ if analyze:
     # RESOURCE ALLOCATION
     # --------------------------------------------------------
 
-    (
-        medical_units,
-        rescue_teams,
-        food_kits,
-        water_units,
-        ambulances
-    ) = calculate_resources(
-        affected_population,
-        risk_score
-    )
+    medical_units = result["resources"]["medical_units"]
+    rescue_teams = result["resources"]["rescue_teams"]
+    food_kits = result["resources"]["food_kits"]
+    water_units = result["resources"]["water_units"]
+    ambulances = result["resources"]["ambulances"]
 
     # --------------------------------------------------------
     # PRIORITY
     # --------------------------------------------------------
 
-    if risk_score >= 70:
-        priority = "P1 - IMMEDIATE"
-    elif risk_score >= 50:
-        priority = "P2 - HIGH"
-    elif risk_score >= 30:
-        priority = "P3 - MODERATE"
-    else:
-        priority = "P4 - LOW"
-
     # --------------------------------------------------------
     # DATA SOURCES
     # --------------------------------------------------------
 
-    data_sources = [
-        "🌧️ Rainfall / Weather Data",
-        "🌊 Water-Level / Sensor Data",
-        "👥 Population Impact Data",
-        "🏠 Damage Assessment Data",
-        "🚑 Emergency Resource Data"
-    ]
+    data_sources = result["data_sources"]
 
     # ========================================================
     # RESULT HEADER
