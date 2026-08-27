@@ -453,12 +453,9 @@ if analyze:
     # DAMAGE ENGINE
     # --------------------------------------------------------
 
-    infrastructure_damage, estimated_assets, damage_severity = (
-        calculate_damage(
-            damage_percentage,
-            affected_population
-        )
-    )
+    infrastructure_damage = result["damage"]["infrastructure_damage"]
+    estimated_assets = result["damage"]["estimated_affected_assets"]
+    damage_severity = result["damage"]["severity"]
 
     # --------------------------------------------------------
     # TRANSPORT RISK
