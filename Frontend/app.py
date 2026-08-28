@@ -1,8 +1,22 @@
 import streamlit as st
 import pandas as pd
 import requests
+import joblib
+from pathlib import Path
 from datetime import datetime
+
 API_URL = "http://127.0.0.1:8000/analyze"
+
+# ============================================================
+# FLOOD FORECASTING MODEL
+# ============================================================
+
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+
+MODEL_DIR = PROJECT_ROOT / "models"
+
+FLOOD_MODEL_PATH = MODEL_DIR / "final_flood_model.pkl"
+PREPROCESSOR_PATH = MODEL_DIR / "preprocessor.pkl"
 
 # ============================================================
 # PAGE CONFIG
@@ -90,6 +104,88 @@ st.markdown("""
 # ============================================================
 # HELPER FUNCTIONS
 # ============================================================
+
+def predict_flood(
+    station,
+    year,
+    month,
+    max_temp,
+    min_temp,
+    rainfall,
+    humidity,
+    wind_speed,
+    cloud_coverage,
+    bright_sunshine,
+    latitude,
+    longitude,
+    altitude
+):
+    """
+    Generate ML-based flood prediction.
+    """
+
+    model = joblib.load(FLOOD_MODEL_PATH)
+    preprocessor = joblib.load(PREPROCESSOR_PATH)
+
+    # Feature engineering
+    temperature_range = max_temp - min_temp
+
+    humidity_rainfall_index = humidity * rainfall
+
+    # Season
+    if month in [12, 1, 2]:
+        season = "Winter"
+    elif month in [3, 4, 5]:
+        season = "Pre-Monsoon"
+    elif month in [6, 7, 8, 9]:
+        season = "Monsoon"
+    else:
+        season = "Post-Monsoon"
+
+    # Rainfall category
+    if rainfall <= 50:
+        rainfall_category = "Low"
+    elif rainfall <= 200:
+        rainfall_category = "Moderate"
+    elif rainfall <= 500:
+        rainfall_category = "High"
+    else:
+        rainfall_category = "Extreme"
+
+    input_data = pd.DataFrame([{
+        "Station_Names": station,
+        "Year": year,
+        "Month": month,
+        "Max_Temp": max_temp,
+        "Min_Temp": min_temp,
+        "Rainfall": rainfall,
+        "Relative_Humidity": humidity,
+        "Wind_Speed": wind_speed,
+        "Cloud_Coverage": cloud_coverage,
+        "Bright_Sunshine": bright_sunshine,
+        "LATITUDE": latitude,
+        "LONGITUDE": longitude,
+        "ALT": altitude,
+        "Season": season,
+        "Rainfall_Category": rainfall_category,
+        "Temperature_Range": temperature_range,
+        "Humidity_Rainfall_Index": humidity_rainfall_index
+    }])
+
+    X = preprocessor.transform(input_data)
+
+    prediction = model.predict(X)[0]
+
+    probability = model.predict_proba(X)[0][1]
+
+    if probability >= 0.80:
+        risk_level = "HIGH"
+    elif probability >= 0.50:
+        risk_level = "MEDIUM"
+    else:
+        risk_level = "LOW"
+
+    return prediction, probability, risk_level
 
 def clamp(value, minimum=0, maximum=100):
     return max(minimum, min(value, maximum))
