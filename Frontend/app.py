@@ -129,7 +129,6 @@ def predict_flood(
 
     # Feature engineering
     temperature_range = max_temp - min_temp
-
     humidity_rainfall_index = humidity * rainfall
 
     # Season
@@ -175,7 +174,6 @@ def predict_flood(
     X = preprocessor.transform(input_data)
 
     prediction = model.predict(X)[0]
-
     probability = model.predict_proba(X)[0][1]
 
     if probability >= 0.80:
@@ -186,6 +184,26 @@ def predict_flood(
         risk_level = "LOW"
 
     return prediction, probability, risk_level
+
+
+def estimate_warning_window(probability, water_level):
+    """
+    Operational warning estimate based on ML probability
+    and current water level.
+    """
+
+    if probability >= 0.80 or water_level >= 5:
+        return "Within 1–2 days", "HIGH"
+
+    elif probability >= 0.60 or water_level >= 3:
+        return "Within 3–5 days", "MEDIUM"
+
+    elif probability >= 0.40 or water_level >= 2:
+        return "Within 5–7 days", "WATCH"
+
+    else:
+        return "Low immediate flood indication", "LOW"
+
 
 def clamp(value, minimum=0, maximum=100):
     return max(minimum, min(value, maximum))
@@ -412,6 +430,223 @@ with st.sidebar:
         st.session_state.clear()
         st.rerun()
 
+# ============================================================
+# FLOOD FORECASTING
+# ============================================================
+
+st.divider()
+
+st.markdown(
+    '<div class="section-title">🌊 Flood Forecasting</div>',
+    unsafe_allow_html=True
+)
+
+st.write(
+    "Enter current environmental conditions to estimate flood probability "
+    "using the trained flood prediction model."
+)
+
+fc1, fc2, fc3 = st.columns(3)
+
+with fc1:
+    forecast_station = st.text_input(
+        "Monitoring Station",
+        value="Bhubaneswar",
+        key="forecast_station"
+    )
+
+    forecast_year = st.number_input(
+        "Year",
+        min_value=2000,
+        max_value=2100,
+        value=datetime.now().year,
+        key="forecast_year"
+    )
+
+    forecast_month = st.number_input(
+        "Month",
+        min_value=1,
+        max_value=12,
+        value=datetime.now().month,
+        key="forecast_month"
+    )
+
+    forecast_rainfall = st.number_input(
+        "Forecast Rainfall (mm)",
+        min_value=0.0,
+        max_value=1000.0,
+        value=50.0,
+        step=10.0,
+        key="forecast_rainfall"
+    )
+
+with fc2:
+    forecast_max_temp = st.number_input(
+        "Maximum Temperature (°C)",
+        min_value=-20.0,
+        max_value=60.0,
+        value=32.0,
+        key="forecast_max_temp"
+    )
+
+    forecast_min_temp = st.number_input(
+        "Minimum Temperature (°C)",
+        min_value=-20.0,
+        max_value=50.0,
+        value=24.0,
+        key="forecast_min_temp"
+    )
+
+    forecast_humidity = st.number_input(
+        "Relative Humidity (%)",
+        min_value=0.0,
+        max_value=100.0,
+        value=80.0,
+        key="forecast_humidity"
+    )
+
+    forecast_wind = st.number_input(
+        "Wind Speed",
+        min_value=0.0,
+        max_value=200.0,
+        value=10.0,
+        key="forecast_wind"
+    )
+
+with fc3:
+    forecast_cloud = st.number_input(
+        "Cloud Coverage",
+        min_value=0.0,
+        max_value=100.0,
+        value=60.0,
+        key="forecast_cloud"
+    )
+
+    forecast_sunshine = st.number_input(
+        "Bright Sunshine",
+        min_value=0.0,
+        max_value=24.0,
+        value=6.0,
+        key="forecast_sunshine"
+    )
+
+    forecast_water = st.number_input(
+        "Current Water Level (m)",
+        min_value=0.0,
+        max_value=20.0,
+        value=1.0,
+        step=0.1,
+        key="forecast_water"
+    )
+
+    forecast_latitude = st.number_input(
+        "Latitude",
+        min_value=-90.0,
+        max_value=90.0,
+        value=20.30,
+        key="forecast_latitude"
+    )
+
+    forecast_longitude = st.number_input(
+        "Longitude",
+        min_value=-180.0,
+        max_value=180.0,
+        value=85.82,
+        key="forecast_longitude"
+    )
+
+forecast_altitude = st.number_input(
+    "Altitude (m)",
+    min_value=-500.0,
+    max_value=9000.0,
+    value=45.0,
+    key="forecast_altitude"
+)
+
+if st.button(
+    "🌊 Predict Flood Risk",
+    type="primary",
+    use_container_width=True
+):
+
+    try:
+        prediction, probability, ml_risk = predict_flood(
+            forecast_station,
+            forecast_year,
+            forecast_month,
+            forecast_max_temp,
+            forecast_min_temp,
+            forecast_rainfall,
+            forecast_humidity,
+            forecast_wind,
+            forecast_cloud,
+            forecast_sunshine,
+            forecast_latitude,
+            forecast_longitude,
+            forecast_altitude
+        )
+
+        warning_window, warning_level = estimate_warning_window(
+            probability,
+            forecast_water
+        )
+
+        st.divider()
+
+        r1, r2, r3 = st.columns(3)
+
+        with r1:
+            st.metric(
+                "Flood Probability",
+                f"{probability * 100:.1f}%"
+            )
+
+        with r2:
+            st.metric(
+                "ML Flood Risk",
+                ml_risk
+            )
+
+        with r3:
+            st.metric(
+                "Current Water Level",
+                f"{forecast_water:.1f} m"
+            )
+
+        if warning_level == "HIGH":
+            st.error(
+                f"🚨 HIGH FLOOD ALERT — Estimated warning window: "
+                f"**{warning_window}**"
+            )
+
+        elif warning_level == "MEDIUM":
+            st.warning(
+                f"⚠️ ELEVATED FLOOD RISK — Estimated warning window: "
+                f"**{warning_window}**"
+            )
+
+        elif warning_level == "WATCH":
+            st.info(
+                f"🟡 FLOOD WATCH — Estimated warning window: "
+                f"**{warning_window}**"
+            )
+
+        else:
+            st.success(
+                "🟢 LOW IMMEDIATE FLOOD INDICATION"
+            )
+
+        st.caption(
+            "Note: Flood probability is produced by the trained ML model. "
+            "The warning window is an operational estimate based on the "
+            "model probability and current water level; it is not a "
+            "directly trained multi-day prediction."
+        )
+
+    except Exception as e:
+        st.error(
+            f"Flood prediction failed: {e}"
+        )
 
 # ============================================================
 # INPUT SECTION
